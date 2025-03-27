@@ -222,7 +222,7 @@
         $main.children('.thumb').each(function () {
 
             var $this = $(this),
-                $image = $this.find('.image'), $image_img = $image.children('video'),
+                $image = $this.find('.image'), $image_video = $image.children('video'),
                 x;
 
             // No image? Bail.
@@ -231,17 +231,17 @@
 
             // Image.
             // This sets the background of the "image" <span> to the image pointed to by its child
-            // <img> (which is then hidden). Gives us way more flexibility.
+            // <video> (which is then hidden). Gives us way more flexibility.
 
             // Set background.
-            $image.css('background-image', 'url(' + $image_img.attr('src') + ')');
+            $image.css('background-image', 'url(' + $image_video.attr('src') + ')');
 
             // Set background position.
-            if (x = $image_img.data('position'))
+            if (x = $image_video.data('position'))
                 $image.css('background-position', x);
 
-            // Hide original img.
-            $image_img.hide();
+            // Hide original video.
+            $image_video.hide();
 
             // Hack: IE<11 doesn't support pointer-events, which means clicks to our image never
             // land as they're blocked by the thumbnail's caption overlay gradient. This just forces
@@ -254,9 +254,9 @@
                     });
 
             // EXIF data
-            $image_img[0].addEventListener("load", function() {
-                EXIF.getData($image_img[0], function () {
-                    exifDatas[$image_img.data('name')] = getExifDataMarkup(this);
+            $image_video[0].addEventListener("load", function() {
+                EXIF.getData($image_video[0], function () {
+                    exifDatas[$image_video.data('name')] = getExifDataMarkup(this);
                 });
             });
 
@@ -266,12 +266,12 @@
         $main.poptrox({
             baseZIndex: 20000,
             caption: function ($a) {
-                var $image_img = $a.children('img');
-                var data = exifDatas[$image_img.data('name')];
+                var $image_video = $a.children('video');
+                var data = exifDatas[$image_video.data('name')];
                 if (data === undefined) {
                     // EXIF data					
-                    EXIF.getData($image_img[0], function () {
-                        data = exifDatas[$image_img.data('name')] = getExifDataMarkup(this);
+                    EXIF.getData($image_video[0], function () {
+                        data = exifDatas[$image_video.data('name')] = getExifDataMarkup(this);
                     });
                 }
                 return data !== undefined ? '<p>' + data + '</p>' : ' ';
@@ -308,12 +308,12 @@
                 $main[0]._poptrox.windowMargin = 0;
             });
 
-        function getExifDataMarkup(img) {
+        function getExifDataMarkup(video) {
             var exif = $('#main').data('exif');
             var template = '';
             for (var current in exif) {
                 var current_data = exif[current];
-                var exif_data = EXIF.getTag(img, current_data['tag']);
+                var exif_data = EXIF.getTag(video, current_data['tag']);
                 if (typeof exif_data !== "undefined") {
                     template += '<i class="fa fa-' + current_data['icon'] + '" aria-hidden="true"></i> ' + exif_data + '&nbsp;&nbsp;';
                 }

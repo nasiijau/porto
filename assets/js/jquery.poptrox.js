@@ -401,7 +401,7 @@
             })
             .on('poptrox_switch', function(e, index, ignoreLock) {
 
-                var x, img, c;
+                var x, video, c;
 
                 if (!ignoreLock && isLocked)
                     return true;
@@ -636,7 +636,7 @@
 
         $this.find(settings.selector).each(function(index) {
 
-            var x, tmp, a = $(this), i = a.find('img'), data = a.data('poptrox');
+            var x, tmp, a = $(this), i = a.find('video'), data = a.data('poptrox');
 
             // Ignore? Skip.
             if (data == 'ignore')
@@ -843,11 +843,11 @@
                     break;
 
                 default:
-                    x.object = $('<img src="" alt="" style="vertical-align:bottom" />');
+                    x.object = $('<video src="" alt="" style="vertical-align:bottom" />');
 
                     if (settings.preload) {
 
-                        var tmp = document.createElement('img');
+                        var tmp = document.createElement('video');
                         tmp.src = x.src; cache.push(tmp);
 
                     }
